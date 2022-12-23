@@ -1,0 +1,45 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Board {
+  id      String   @id @default(uuid())
+  name    String
+  columns Column[]
+}
+
+model Column {
+  id       String @id @default(uuid())
+  name     String
+  boardId  String
+  board    Board  @relation(fields: [boardId], references: [id])
+  tasks    Task[]
+  position Int
+}
+
+model Task {
+  id          String    @id @default(uuid())
+  title       String
+  description String?
+  columnId    String
+  column      Column    @relation(fields: [columnId], references: [id])
+  position    Int
+  subtasks    Subtask[]
+}
+
+model Subtask {
+  id         String  @id @default(uuid())
+  title      String
+  isComplete Boolean @default(false)
+  taskId     String
+  task       Task    @relation(fields: [taskId], references: [id])
+  position   Int
+}
