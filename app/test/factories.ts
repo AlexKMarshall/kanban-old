@@ -10,7 +10,9 @@ type Subtask = {
   title: string
   isComplete: boolean
 }
-export function getNewSubtask(overrides?: PartialDeep<Subtask>) {
+export function getNewSubtask(
+  overrides?: PartialDeep<Subtask, { recurseIntoArrays: true }>
+) {
   return {
     id: faker.datatype.uuid(),
     title: faker.lorem.sentence(),
@@ -29,7 +31,7 @@ type Task = {
 export function getNewTask({
   subtasks: subtasksOverrides,
   ...overrides
-}: PartialDeep<Task> = {}) {
+}: PartialDeep<Task, { recurseIntoArrays: true }> = {}) {
   const subtasks = (
     subtasksOverrides ??
     getEmptyArray(faker.datatype.number({ min: 0, max: 5 }))
@@ -53,7 +55,7 @@ type Column = {
 export function getNewColumn({
   tasks: tasksOverrides,
   ...overrides
-}: PartialDeep<Column> = {}) {
+}: PartialDeep<Column, { recurseIntoArrays: true }> = {}) {
   const tasks = (
     tasksOverrides ?? getEmptyArray(faker.datatype.number({ min: 0, max: 5 }))
   ).map(getNewTask)
@@ -75,7 +77,7 @@ type Board = {
 export function getNewBoard({
   columns: columnsOverrides,
   ...overrides
-}: PartialDeep<Board> = {}) {
+}: PartialDeep<Board, { recurseIntoArrays: true }> = {}) {
   const columns = (
     columnsOverrides ?? getEmptyArray(faker.datatype.number({ min: 0, max: 5 }))
   ).map(getNewColumn)
@@ -93,7 +95,7 @@ type SeedData = {
 }
 export function getNewSeedData({
   boards: boardsOverrides,
-}: PartialDeep<SeedData> = {}) {
+}: PartialDeep<SeedData, { recurseIntoArrays: true }> = {}) {
   const boards = (
     boardsOverrides ?? getEmptyArray(faker.datatype.number({ min: 0, max: 5 }))
   ).map(getNewBoard)
