@@ -3,8 +3,6 @@ import { test, expect } from '~/test/fixtures'
 test('show lists of tasks', async ({ seedData, page }) => {
   const [board] = seedData.boards
 
-  await page.goto('/boards/')
-
   await page.getByRole('link', { name: board.name }).click()
 
   await expect(
