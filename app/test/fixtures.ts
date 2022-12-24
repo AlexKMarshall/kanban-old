@@ -7,6 +7,7 @@ import {
 } from './database'
 import { getNewSeedData } from './factories'
 import { startServer } from './server'
+import seedData from './seed-data.json'
 
 type TestFixtures = {
   seedData: ReturnType<typeof getNewSeedData>
@@ -41,7 +42,7 @@ const test = base.extend<TestFixtures, WorkerFixtures>({
     { scope: 'worker', auto: true },
   ],
   seedData: async ({}, use) => {
-    await use(getNewSeedData())
+    await use(getNewSeedData(seedData))
   },
   baseURL: async ({ server }, use) => {
     await use(`http://localhost:${server.port}`)

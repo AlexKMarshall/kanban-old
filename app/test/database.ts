@@ -24,10 +24,6 @@ export function migrateDatabase(url: string) {
     console.log('something went wrong migrating the database')
     console.error(error)
   }
-
-  // return execSync(`pnpm db:push --accept-data-loss`, {
-  //   env: { ...process.env, NODE_ENV: 'test', DATABASE_URL: url },
-  // })
 }
 
 export function getPrismaClient(url?: string) {
