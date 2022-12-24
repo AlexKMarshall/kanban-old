@@ -53,9 +53,10 @@ export const loader = async ({ params }: LoaderArgs) => {
 
 export default function BoardId() {
   const { board, columns, tasks } = useLoaderData<typeof loader>()
+  const headingId = useId()
   return (
-    <div>
-      <h1>{board.name}</h1>
+    <main>
+      <h1 id={headingId}>{board.name}</h1>
       <button type="button">Add new task</button>
       <button type="button">Edit board</button>
       <button type="button">Delete board</button>
@@ -63,7 +64,7 @@ export default function BoardId() {
       {board.columns.length === 0 ? (
         <BoardEmptyState />
       ) : (
-        <ol>
+        <ol aria-labelledby={headingId}>
           {board.columns.map(({ id: columnId }) => {
             const column = columns[columnId]
             return <Column column={column} tasks={tasks} key={columnId} />
@@ -71,7 +72,7 @@ export default function BoardId() {
         </ol>
       )}
       <button type="button">New column</button>
-    </div>
+    </main>
   )
 }
 

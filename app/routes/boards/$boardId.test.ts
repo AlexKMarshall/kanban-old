@@ -10,17 +10,22 @@ test('show lists of tasks', async ({ seedData, page }) => {
     page.getByRole('heading', { name: board.name, level: 1 })
   ).toBeVisible()
 
-  const { columns } = board
-
-  await Promise.all(
-    columns.flatMap(({ name, tasks }) => [
-      expect(page.getByRole('list', { name })).toBeVisible(),
-
-      ...tasks.flatMap(({ title }) => [
-        expect(page.getByRole('listitem', { name: title })).toBeVisible(),
-      ]),
-    ])
+  // Check that the columns are in the right order
+  const columnNames = board.columns.map(({ name }) => new RegExp(name, 'i'))
+  const listOfColumns = await page.getByRole('list', { name: board.name })
+  // Have to select the level two headings - if we selected the list items
+  // it would recurse into the tasks
+  await expect(listOfColumns.getByRole('heading', { level: 2 })).toHaveText(
+    columnNames
   )
+
+  for (const column of board.columns) {
+    const columnList = await page.getByRole('list', { name: column.name })
+
+    const taskTitles = column.tasks.map(({ title }) => new RegExp(title, 'i'))
+
+    await expect(columnList.getByRole('listitem')).toHaveText(taskTitles)
+  }
 })
 
 test.describe('empty board', () => {
