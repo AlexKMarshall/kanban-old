@@ -1,7 +1,7 @@
 import type { LoaderArgs } from '@remix-run/node'
 import { Response } from '@remix-run/node'
 import { json } from '@remix-run/node'
-import { Link, useLoaderData } from '@remix-run/react'
+import { Link, Outlet, useLoaderData } from '@remix-run/react'
 import { useId } from 'react'
 import { db } from '~/db.server'
 
@@ -57,22 +57,31 @@ export default function BoardId() {
   return (
     <main>
       <h1 id={headingId}>{board.name}</h1>
+      <Outlet />
       {board.columns.length === 0 ? (
         <BoardEmptyState />
       ) : (
-        <ol aria-labelledby={headingId}>
-          {board.columns.map(({ id: columnId }) => {
-            const column = columns[columnId]
-            return <Column column={column} tasks={tasks} key={columnId} />
-          })}
-        </ol>
+        <>
+          <ol aria-labelledby={headingId}>
+            {board.columns.map(({ id: columnId }) => {
+              const column = columns[columnId]
+              return <Column column={column} tasks={tasks} key={columnId} />
+            })}
+          </ol>
+          <Link to="columns/add">New Column</Link>
+        </>
       )}
     </main>
   )
 }
 
 function BoardEmptyState() {
-  return <p>This board is empty. Create a new column to get started.</p>
+  return (
+    <div>
+      <p>This board is empty. Create a new column to get started.</p>
+      <Link to="columns/add">Add New Column</Link>
+    </div>
+  )
 }
 
 type ColumnProps = {

@@ -26,6 +26,7 @@ specifiers:
   turbo: ^1.6.3
   type-fest: ^3.4.0
   typescript: ^4.8.4
+  zod: ^3.20.2
 
 dependencies:
   '@prisma/client': 4.8.0_prisma@4.8.0
@@ -35,6 +36,7 @@ dependencies:
   isbot: 3.6.5
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
+  zod: 3.20.2
 
 devDependencies:
   '@faker-js/faker': 7.6.0
@@ -8029,6 +8031,10 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
     dev: true
+
+  /zod/3.20.2:
+    resolution: {integrity: sha512-1MzNQdAvO+54H+EaK5YpyEy0T+Ejo/7YLHS93G3RnYWh5gaotGHwGeN/ZO687qEDU2y4CdStQYXVHIgrUl5UVQ==}
+    dev: false
 
   /zwitch/2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
