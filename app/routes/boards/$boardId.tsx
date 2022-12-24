@@ -1,7 +1,7 @@
 import type { LoaderArgs } from '@remix-run/node'
 import { Response } from '@remix-run/node'
 import { json } from '@remix-run/node'
-import { Link, Outlet, useLoaderData } from '@remix-run/react'
+import { Link, useLoaderData } from '@remix-run/react'
 import { useId } from 'react'
 import { db } from '~/db.server'
 
@@ -57,10 +57,6 @@ export default function BoardId() {
   return (
     <main>
       <h1 id={headingId}>{board.name}</h1>
-      <button type="button">Add new task</button>
-      <button type="button">Edit board</button>
-      <button type="button">Delete board</button>
-      <Outlet />
       {board.columns.length === 0 ? (
         <BoardEmptyState />
       ) : (
@@ -71,7 +67,6 @@ export default function BoardId() {
           })}
         </ol>
       )}
-      <button type="button">New column</button>
     </main>
   )
 }
