@@ -54,7 +54,7 @@ export default function AddColumn() {
 
   return (
     <Form method="post">
-      <h1>Add New Column</h1>
+      <h2>Add New Column</h2>
       <div>
         <label htmlFor="name">Column Name</label>
         <input
