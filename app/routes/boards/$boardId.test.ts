@@ -26,7 +26,7 @@ test('show lists of tasks', async ({ seedData, page }) => {
 test.describe('empty board', () => {
   test.use({ seedData: getNewSeedData({ boards: [{ columns: [] }] }) })
 
-  test.only('show empty board state', async ({ seedData, page }) => {
+  test('show empty board state', async ({ seedData, page }) => {
     const [board] = seedData.boards
 
     await page.getByRole('link', { name: board.name }).click()

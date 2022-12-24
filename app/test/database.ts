@@ -42,7 +42,11 @@ export async function seedDatabase(
   seedData = getNewSeedData(defaultSeedData),
   db = getPrismaClient()
 ) {
-  const boards = seedData.boards
+  const boards = seedData.boards.map((board, position) => ({
+    ...board,
+    position,
+  }))
+
   const columns = boards.flatMap(({ id: boardId, columns }) =>
     columns.map((column, position) => ({ ...column, position, boardId }))
   )
