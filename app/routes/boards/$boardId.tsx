@@ -60,15 +60,23 @@ export default function BoardId() {
       <button type="button">Edit board</button>
       <button type="button">Delete board</button>
       <Outlet />
-      <ol>
-        {board.columns.map(({ id: columnId }) => {
-          const column = columns[columnId]
-          return <Column column={column} tasks={tasks} key={columnId} />
-        })}
-      </ol>
+      {board.columns.length === 0 ? (
+        <BoardEmptyState />
+      ) : (
+        <ol>
+          {board.columns.map(({ id: columnId }) => {
+            const column = columns[columnId]
+            return <Column column={column} tasks={tasks} key={columnId} />
+          })}
+        </ol>
+      )}
       <button type="button">New column</button>
     </div>
   )
+}
+
+function BoardEmptyState() {
+  return <p>This board is empty. Create a new column to get started.</p>
 }
 
 type ColumnProps = {
