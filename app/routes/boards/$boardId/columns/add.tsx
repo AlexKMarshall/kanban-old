@@ -1,6 +1,7 @@
 import type { ActionArgs } from '@remix-run/node'
+import { json } from '@remix-run/node'
 import { redirect } from '@remix-run/node'
-import { Form } from '@remix-run/react'
+import { Form, useActionData } from '@remix-run/react'
 import { db } from '~/db.server'
 import * as z from 'zod'
 
@@ -16,7 +17,15 @@ export async function action({ params, request }: ActionArgs) {
   const { boardId } = paramsSchema.parse(params)
   const formData = await request.formData()
 
-  const { name } = addColumnSchema.parse(Object.fromEntries(formData))
+  const safeParse = addColumnSchema.safeParse(Object.fromEntries(formData))
+
+  if (!safeParse.success) {
+    return json({
+      error: safeParse.error.flatten(),
+    })
+  }
+
+  const { name } = safeParse.data
 
   await db.$transaction(async (tx) => {
     const columnAggregate = await tx.column.aggregate({
@@ -39,12 +48,30 @@ export async function action({ params, request }: ActionArgs) {
 }
 
 export default function AddColumn() {
+  const data = useActionData<typeof action>()
+
+  const formError = data?.error.formErrors.join(',')
+
   return (
     <Form method="post">
       <h1>Add New Column</h1>
-      <label htmlFor="name">Column Name</label>
-      <input type="text" id="name" name="name" />
+      <div>
+        <label htmlFor="name">Column Name</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          aria-invalid={Boolean(data?.error.fieldErrors.name)}
+          aria-errormessage={
+            data?.error.fieldErrors.name ? 'name-error' : undefined
+          }
+        />
+        {data?.error.fieldErrors.name ? (
+          <p id="name-error">{data.error.fieldErrors.name.join(',')}</p>
+        ) : null}
+      </div>
       <button type="submit">Create New Column</button>
+      {formError ? <p>{formError}</p> : null}
     </Form>
   )
 }
