@@ -65,6 +65,7 @@ export default function AddColumn() {
           aria-errormessage={
             data?.error.fieldErrors.name ? 'name-error' : undefined
           }
+          required
         />
         {data?.error.fieldErrors.name ? (
           <p id="name-error">{data.error.fieldErrors.name.join(',')}</p>
