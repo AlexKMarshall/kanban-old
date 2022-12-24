@@ -9,6 +9,10 @@
       "dependsOn": ["db:generate"],
       "outputs": ["build/**", "public/build/**"]
     },
+    "start": {
+      "dependsOn": ["build"],
+      "cache": false
+    },
     "lint": {
       "outputs": []
     },
@@ -24,6 +28,10 @@
     "db:seed": {
       "dependsOn": ["db:push", "db:generate"],
       "cache": false
+    },
+    "test:e2e": {
+      "dependsOn": ["build"],
+      "outputs": ["playwright-report"]
     }
   }
 }

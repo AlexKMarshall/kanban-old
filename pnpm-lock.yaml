@@ -2,6 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@faker-js/faker': ^7.6.0
+  '@playwright/test': ^1.29.1
   '@prisma/client': 4.8.0
   '@remix-run/dev': ^1.9.0
   '@remix-run/eslint-config': ^1.9.0
@@ -37,6 +38,7 @@ dependencies:
 
 devDependencies:
   '@faker-js/faker': 7.6.0
+  '@playwright/test': 1.29.1
   '@remix-run/dev': 1.9.0_mkzy6tkjmjsmfnxs5znqfowy5i
   '@remix-run/eslint-config': 1.9.0_cl6c6lk46klsk2subiyfxwnfya
   '@types/react': 18.0.26
@@ -1931,6 +1933,15 @@ packages:
       picocolors: 1.0.0
       tiny-glob: 0.2.9
       tslib: 2.4.1
+    dev: true
+
+  /@playwright/test/1.29.1:
+    resolution: {integrity: sha512-iQxk2DX5U9wOGV3+/Jh9OHPsw5H3mleUL2S4BgQuwtlAfK3PnKvn38m4Rg9zIViGHVW24opSm99HQm/UFLEy6w==}
+    engines: {node: '>=14'}
+    hasBin: true
+    dependencies:
+      '@types/node': 18.11.17
+      playwright-core: 1.29.1
     dev: true
 
   /@prisma/client/4.8.0_prisma@4.8.0:
@@ -6463,6 +6474,12 @@ packages:
     engines: {node: '>=6'}
     dependencies:
       find-up: 3.0.0
+    dev: true
+
+  /playwright-core/1.29.1:
+    resolution: {integrity: sha512-20Ai3d+lMkWpI9YZYlxk8gxatfgax5STW8GaMozAHwigLiyiKQrdkt7gaoT9UQR8FIVDg6qVXs9IoZUQrDjIIg==}
+    engines: {node: '>=14'}
+    hasBin: true
     dev: true
 
   /posix-character-classes/0.1.1:
