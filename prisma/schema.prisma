@@ -11,9 +11,10 @@ datasource db {
 }
 
 model Board {
-  id      String   @id @default(uuid())
-  name    String
-  columns Column[]
+  id       String   @id @default(uuid())
+  name     String
+  columns  Column[]
+  position Int
 }
 
 model Column {

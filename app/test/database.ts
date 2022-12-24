@@ -24,10 +24,6 @@ export function migrateDatabase(url: string) {
     console.log('something went wrong migrating the database')
     console.error(error)
   }
-
-  // return execSync(`pnpm db:push --accept-data-loss`, {
-  //   env: { ...process.env, NODE_ENV: 'test', DATABASE_URL: url },
-  // })
 }
 
 export function getPrismaClient(url?: string) {
@@ -46,7 +42,11 @@ export async function seedDatabase(
   seedData = getNewSeedData(defaultSeedData),
   db = getPrismaClient()
 ) {
-  const boards = seedData.boards
+  const boards = seedData.boards.map((board, position) => ({
+    ...board,
+    position,
+  }))
+
   const columns = boards.flatMap(({ id: boardId, columns }) =>
     columns.map((column, position) => ({ ...column, position, boardId }))
   )

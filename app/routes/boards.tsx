@@ -4,7 +4,7 @@ import { useId } from 'react'
 import { db } from '~/db.server'
 
 export const loader = async () => {
-  const boards = await db.board.findMany()
+  const boards = await db.board.findMany({ orderBy: { position: 'asc' } })
 
   return json({ boards })
 }
@@ -17,13 +17,13 @@ export default function Boards() {
     <div>
       <nav aria-labelledby={headingId}>
         <h2 id={headingId}>All boards ({boards.length})</h2>
-        <ul>
+        <ol>
           {boards.map((board) => (
             <li key={board.id}>
               <Link to={`${board.id}`}>{board.name}</Link>
             </li>
           ))}
-        </ul>
+        </ol>
       </nav>
       <Outlet />
     </div>
