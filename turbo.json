@@ -1,14 +1,37 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
+    "dev": {
+      "dependsOn": ["db:generate"],
+      "cache": false
+    },
     "build": {
+      "dependsOn": ["db:generate"],
       "outputs": ["build/**", "public/build/**"]
+    },
+    "start": {
+      "dependsOn": ["build"],
+      "cache": false
     },
     "lint": {
       "outputs": []
     },
     "typecheck": {
       "outputs": []
+    },
+    "db:generate": {
+      "cache": false
+    },
+    "db:push": {
+      "cache": false
+    },
+    "db:seed": {
+      "dependsOn": ["db:push", "db:generate"],
+      "cache": false
+    },
+    "test:e2e": {
+      "dependsOn": ["build"],
+      "outputs": ["playwright-report"]
     }
   }
 }

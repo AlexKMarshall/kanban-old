@@ -7,9 +7,14 @@
     "start": "remix-serve build",
     "typecheck": "tsc --skipLibCheck",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "db:push": "prisma db push --skip-generate",
+    "db:generate": "prisma generate",
+    "db:seed": "prisma db seed",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
+    "@prisma/client": "4.8.0",
     "@remix-run/node": "^1.9.0",
     "@remix-run/react": "^1.9.0",
     "@remix-run/serve": "^1.9.0",
@@ -18,20 +23,29 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
+    "@playwright/test": "^1.29.1",
     "@remix-run/dev": "^1.9.0",
     "@remix-run/eslint-config": "^1.9.0",
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.8",
     "@typescript-eslint/eslint-plugin": "^5.47.0",
     "@typescript-eslint/parser": "^5.47.0",
+    "esbuild": "^0.16.10",
+    "esbuild-register": "^3.4.2",
     "eslint": "^8.30.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-react": "^7.31.11",
     "prettier": "^2.8.1",
+    "prisma": "^4.8.0",
     "turbo": "^1.6.3",
+    "type-fest": "^3.4.0",
     "typescript": "^4.8.4"
   },
   "engines": {
     "node": ">=14"
+  },
+  "prisma": {
+    "seed": "node --require esbuild-register app/test/seed-script.ts"
   }
 }
