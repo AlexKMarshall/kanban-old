@@ -57,27 +57,31 @@ export default function BoardId() {
   return (
     <main>
       <h1 id={headingId}>{board.name}</h1>
-      <button type="button">Add new task</button>
-      <button type="button">Edit board</button>
-      <button type="button">Delete board</button>
       <Outlet />
       {board.columns.length === 0 ? (
         <BoardEmptyState />
       ) : (
-        <ol aria-labelledby={headingId}>
-          {board.columns.map(({ id: columnId }) => {
-            const column = columns[columnId]
-            return <Column column={column} tasks={tasks} key={columnId} />
-          })}
-        </ol>
+        <>
+          <ol aria-labelledby={headingId}>
+            {board.columns.map(({ id: columnId }) => {
+              const column = columns[columnId]
+              return <Column column={column} tasks={tasks} key={columnId} />
+            })}
+          </ol>
+          <Link to="columns/add">New Column</Link>
+        </>
       )}
-      <button type="button">New column</button>
     </main>
   )
 }
 
 function BoardEmptyState() {
-  return <p>This board is empty. Create a new column to get started.</p>
+  return (
+    <div>
+      <p>This board is empty. Create a new column to get started.</p>
+      <Link to="columns/add">Add New Column</Link>
+    </div>
+  )
 }
 
 type ColumnProps = {
