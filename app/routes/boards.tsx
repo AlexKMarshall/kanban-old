@@ -15,16 +15,19 @@ export default function Boards() {
 
   return (
     <div>
-      <nav aria-labelledby={headingId}>
-        <h2 id={headingId}>All boards ({boards.length})</h2>
-        <ol>
-          {boards.map((board) => (
-            <li key={board.id}>
-              <Link to={`${board.id}`}>{board.name}</Link>
-            </li>
-          ))}
-        </ol>
-      </nav>
+      <div>
+        <nav aria-labelledby={headingId}>
+          <h2 id={headingId}>All boards ({boards.length})</h2>
+          <ol>
+            {boards.map((board) => (
+              <li key={board.id}>
+                <Link to={`${board.id}`}>{board.name}</Link>
+              </li>
+            ))}
+          </ol>
+        </nav>
+        <Link to="add">Create New Board</Link>
+      </div>
       <Outlet />
     </div>
   )

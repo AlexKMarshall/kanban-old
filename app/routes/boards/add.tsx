@@ -1,23 +1,17 @@
 import type { ActionArgs } from '@remix-run/node'
-import { json } from '@remix-run/node'
-import { redirect } from '@remix-run/node'
+import { json, redirect } from '@remix-run/node'
 import { Form, useActionData } from '@remix-run/react'
-import { db } from '~/db.server'
 import { z } from 'zod'
+import { db } from '~/db.server'
 
-const paramsSchema = z.object({
-  boardId: z.string().min(1),
-})
-
-const addColumnSchema = z.object({
+const addBoardSchema = z.object({
   name: z.string().min(1),
 })
 
-export async function action({ params, request }: ActionArgs) {
-  const { boardId } = paramsSchema.parse(params)
+export async function action({ request }: ActionArgs) {
   const formData = await request.formData()
 
-  const safeParse = addColumnSchema.safeParse(Object.fromEntries(formData))
+  const safeParse = addBoardSchema.safeParse(Object.fromEntries(formData))
 
   if (!safeParse.success) {
     return json({
@@ -25,57 +19,54 @@ export async function action({ params, request }: ActionArgs) {
     })
   }
 
-  const existingColumn = await db.column.findFirst({
-    where: { boardId, name: safeParse.data.name },
+  const existingBoard = await db.board.findFirst({
+    where: { name: safeParse.data.name },
   })
 
-  if (existingColumn) {
+  if (existingBoard) {
     return json({
       error: {
         fieldErrors: {
-          name: ['Column with this name already exists'],
+          name: ['Board with this name already exists'],
         },
         formErrors: [],
       },
     })
   }
 
-  const { name } = safeParse.data
-
-  await db.$transaction(async (tx) => {
-    const columnAggregate = await tx.column.aggregate({
+  const savedBoard = await db.$transaction(async (tx) => {
+    const boardAggregate = await tx.board.aggregate({
       _max: { position: true },
-      where: { boardId },
     })
 
-    const currentMaxPosition = columnAggregate._max.position ?? 0
+    const currentMaxPosition = boardAggregate._max.position ?? 0
 
-    return await tx.column.create({
+    return await tx.board.create({
       data: {
-        name,
-        boardId,
+        name: safeParse.data.name,
         position: currentMaxPosition + 1,
       },
     })
   })
 
-  return redirect(`/boards/${boardId}`)
+  return redirect(`/boards/${savedBoard.id}`)
 }
 
-export default function AddColumn() {
+export default function BoardsAdd() {
   const data = useActionData<typeof action>()
 
   const formError = data?.error.formErrors.join(',')
 
   return (
     <Form method="post">
-      <h2>Add New Column</h2>
+      <h2>Add New Board</h2>
       <div>
-        <label htmlFor="name">Column Name</label>
+        <label htmlFor="board-name">Name</label>
         <input
-          type="text"
-          id="name"
+          id="board-name"
           name="name"
+          type="text"
+          placeholder="e.g. Web Design"
           aria-invalid={Boolean(data?.error.fieldErrors.name)}
           aria-errormessage={
             data?.error.fieldErrors.name ? 'name-error' : undefined
@@ -86,7 +77,7 @@ export default function AddColumn() {
           <p id="name-error">{data.error.fieldErrors.name.join(',')}</p>
         ) : null}
       </div>
-      <button type="submit">Create New Column</button>
+      <button type="submit">Create New Board</button>
       {formError ? <p>{formError}</p> : null}
     </Form>
   )
