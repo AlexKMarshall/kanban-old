@@ -20,5 +20,5 @@
   },
   "plugins": ["react", "@typescript-eslint"],
   "rules": {},
-  "ignorePatterns": ["node_modules/", "dist/", "build/"]
+  "ignorePatterns": ["node_modules/", "dist/", "build/", "app/styles/**/*"]
 }
