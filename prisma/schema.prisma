@@ -12,9 +12,9 @@ datasource db {
 
 model Board {
   id       String   @id @default(uuid())
-  name     String
+  name     String   @unique
   columns  Column[]
-  position Int
+  position Int      @unique
 }
 
 model Column {
@@ -37,6 +37,8 @@ model Task {
   column      Column    @relation(fields: [columnId], references: [id])
   position    Int
   subtasks    Subtask[]
+
+  @@unique([columnId, position])
 }
 
 model Subtask {
@@ -46,4 +48,6 @@ model Subtask {
   taskId     String
   task       Task    @relation(fields: [taskId], references: [id])
   position   Int
+
+  @@unique([taskId, position])
 }

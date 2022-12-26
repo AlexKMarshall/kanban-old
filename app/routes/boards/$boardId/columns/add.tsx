@@ -3,7 +3,7 @@ import { json } from '@remix-run/node'
 import { redirect } from '@remix-run/node'
 import { Form, useActionData } from '@remix-run/react'
 import { db } from '~/db.server'
-import * as z from 'zod'
+import { z } from 'zod'
 
 const paramsSchema = z.object({
   boardId: z.string().min(1),
