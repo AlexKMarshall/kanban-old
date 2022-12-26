@@ -24,6 +24,9 @@ model Column {
   board    Board  @relation(fields: [boardId], references: [id])
   tasks    Task[]
   position Int
+
+  @@unique([boardId, name])
+  @@unique([boardId, position])
 }
 
 model Task {
