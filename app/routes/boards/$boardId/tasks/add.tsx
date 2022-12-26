@@ -73,6 +73,7 @@ export default function TaskAdd() {
 
   return (
     <Form method="post">
+      <h2>Add New Task</h2>
       <div>
         <label htmlFor="title">Title</label>
         <input
