@@ -25,6 +25,21 @@ export async function action({ params, request }: ActionArgs) {
     })
   }
 
+  const existingColumn = await db.column.findFirst({
+    where: { boardId, name: safeParse.data.name },
+  })
+
+  if (existingColumn) {
+    return json({
+      error: {
+        fieldErrors: {
+          name: ['Column with this name already exists'],
+        },
+        formErrors: [],
+      },
+    })
+  }
+
   const { name } = safeParse.data
 
   await db.$transaction(async (tx) => {
