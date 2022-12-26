@@ -1,6 +1,6 @@
 import type { ActionArgs } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
-import { Form } from '@remix-run/react'
+import { Form, useActionData } from '@remix-run/react'
 import { z } from 'zod'
 import { db } from '~/db.server'
 
@@ -53,17 +53,32 @@ export async function action({ request }: ActionArgs) {
 }
 
 export default function BoardsAdd() {
+  const data = useActionData<typeof action>()
+
+  const formError = data?.error.formErrors.join(',')
+
   return (
     <Form method="post">
       <h2>Add New Board</h2>
-      <label htmlFor="board-name">Name</label>
-      <input
-        id="board-name"
-        name="name"
-        type="text"
-        placeholder="e.g. Web Design"
-      />
+      <div>
+        <label htmlFor="board-name">Name</label>
+        <input
+          id="board-name"
+          name="name"
+          type="text"
+          placeholder="e.g. Web Design"
+          aria-invalid={Boolean(data?.error.fieldErrors.name)}
+          aria-errormessage={
+            data?.error.fieldErrors.name ? 'name-error' : undefined
+          }
+          required
+        />
+        {data?.error.fieldErrors.name ? (
+          <p id="name-error">{data.error.fieldErrors.name.join(',')}</p>
+        ) : null}
+      </div>
       <button type="submit">Create New Board</button>
+      {formError ? <p>{formError}</p> : null}
     </Form>
   )
 }
