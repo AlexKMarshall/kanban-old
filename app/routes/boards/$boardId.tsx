@@ -56,7 +56,10 @@ export default function BoardId() {
   const headingId = useId()
   return (
     <main>
-      <h1 id={headingId}>{board.name}</h1>
+      <div>
+        <h1 id={headingId}>{board.name}</h1>
+        <Link to="tasks/add">Add New Task</Link>
+      </div>
       <Outlet />
       {board.columns.length === 0 ? (
         <BoardEmptyState />
