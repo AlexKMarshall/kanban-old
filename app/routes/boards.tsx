@@ -14,7 +14,7 @@ export default function Boards() {
   const headingId = useId()
 
   return (
-    <div>
+    <div id="root">
       <div>
         <nav aria-labelledby={headingId}>
           <h2 id={headingId}>All boards ({boards.length})</h2>

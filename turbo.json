@@ -6,7 +6,7 @@
       "cache": false
     },
     "build": {
-      "dependsOn": ["db:generate"],
+      "dependsOn": ["db:generate", "build:css"],
       "outputs": ["build/**", "public/build/**"]
     },
     "start": {
