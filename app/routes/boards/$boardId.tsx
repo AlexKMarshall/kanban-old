@@ -63,39 +63,40 @@ export default function Board() {
             </li>
           ))}
         </ol>
-        {board.columns.length ? (
-          <ol>
-            {board.columns.map((column) => (
-              <li key={column.id}>
-                <h2>{column.name}</h2>
-                {column.tasks.length ? (
-                  <ol>
-                    {column.tasks.map((task) => {
-                      const totalSubtasks = task.subtasks.length
-                      const completedSubtasks = task.subtasks.filter(
-                        (subtask) => subtask.isComplete
-                      ).length
-
-                      return (
-                        <li key={task.id}>
-                          <h3>{task.title}</h3>
-                          {totalSubtasks ? (
-                            <p>
-                              {completedSubtasks} of {totalSubtasks} subtasks
-                            </p>
-                          ) : null}
-                        </li>
-                      )
-                    })}
-                  </ol>
-                ) : null}
-              </li>
-            ))}
-          </ol>
-        ) : (
-          <EmptyBoard />
-        )}
       </nav>
+
+      {board.columns.length ? (
+        <ol>
+          {board.columns.map((column) => (
+            <li key={column.id}>
+              <h2>{column.name}</h2>
+              {column.tasks.length ? (
+                <ol>
+                  {column.tasks.map((task) => {
+                    const totalSubtasks = task.subtasks.length
+                    const completedSubtasks = task.subtasks.filter(
+                      (subtask) => subtask.isComplete
+                    ).length
+
+                    return (
+                      <li key={task.id}>
+                        <h3>{task.title}</h3>
+                        {totalSubtasks ? (
+                          <p>
+                            {completedSubtasks} of {totalSubtasks} subtasks
+                          </p>
+                        ) : null}
+                      </li>
+                    )
+                  })}
+                </ol>
+              ) : null}
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <EmptyBoard />
+      )}
     </div>
   )
 }
