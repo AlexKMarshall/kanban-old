@@ -1,144 +1,108 @@
 import type { LoaderArgs } from '@remix-run/node'
 import { Response } from '@remix-run/node'
 import { json } from '@remix-run/node'
-import { Link, Outlet, useLoaderData } from '@remix-run/react'
-import { useId } from 'react'
+import { Link, useLoaderData } from '@remix-run/react'
+import { z } from 'zod'
 import { db } from '~/db.server'
 
-const groupById = <T extends { id: string }>(array: T[]) =>
-  array.reduce<Record<string, T>>((acc, item) => {
-    acc[item.id] = item
-    return acc
-  }, {})
+const paramsSchema = z.object({
+  boardId: z.string(),
+})
 
-export const loader = async ({ params }: LoaderArgs) => {
-  const { boardId } = params
+export async function loader({ params }: LoaderArgs) {
+  const { boardId } = paramsSchema.parse(params)
 
-  if (!boardId) {
-    throw new Response('Board ID is required', { status: 400 })
-  }
+  const [board, boards] = await Promise.all([
+    db.board.findUnique({
+      where: { id: boardId },
+      select: {
+        id: true,
+        name: true,
+        columns: {
+          select: {
+            id: true,
+            name: true,
+            tasks: {
+              select: {
+                id: true,
+                title: true,
+                subtasks: { select: { isComplete: true } },
+              },
+              orderBy: { position: 'asc' },
+            },
+          },
+          orderBy: { position: 'asc' },
+        },
+      },
+    }),
+    db.board.findMany({
+      select: { id: true, name: true },
+      orderBy: { position: 'asc' },
+    }),
+  ])
 
-  const board = await db.board.findUnique({
-    where: { id: boardId },
-    select: {
-      id: true,
-      name: true,
-      columns: { select: { id: true }, orderBy: { position: 'asc' } },
-    },
-  })
   if (!board) throw new Response('Board not found', { status: 404 })
-  const columnsArray = await db.column.findMany({
-    where: { boardId },
-    select: {
-      id: true,
-      name: true,
-      tasks: { select: { id: true }, orderBy: { position: 'asc' } },
-    },
-  })
 
-  const columns = groupById(columnsArray)
-
-  const tasksArray = await db.task.findMany({
-    where: { columnId: { in: columnsArray.map((c) => c.id) } },
-    select: {
-      id: true,
-      title: true,
-      subtasks: { select: { isComplete: true } },
-    },
-  })
-  const tasks = groupById(tasksArray)
-
-  return json({ board, columns, tasks })
+  return json({ board, boards })
 }
 
-export default function BoardId() {
-  const { board, columns, tasks } = useLoaderData<typeof loader>()
-  const headingId = useId()
-  return (
-    <main>
-      <div>
-        <h1 id={headingId}>{board.name}</h1>
-        <Link to="tasks/add">Add New Task</Link>
-      </div>
-      <Outlet />
-      {board.columns.length === 0 ? (
-        <BoardEmptyState />
-      ) : (
-        <>
-          <ol aria-labelledby={headingId}>
-            {board.columns.map(({ id: columnId }) => {
-              const column = columns[columnId]
-              return <Column column={column} tasks={tasks} key={columnId} />
-            })}
-          </ol>
-          <Link to="columns/add">New Column</Link>
-        </>
-      )}
-    </main>
-  )
-}
+export default function Board() {
+  const { board, boards } = useLoaderData<typeof loader>()
 
-function BoardEmptyState() {
   return (
     <div>
-      <p>This board is empty. Create a new column to get started.</p>
-      <Link to="columns/add">Add New Column</Link>
+      <header>
+        <h1>{board.name}</h1>
+      </header>
+      <nav>
+        <h2>All boards ({boards.length})</h2>
+        <ol>
+          {boards.map((board) => (
+            <li key={board.id}>
+              <Link to={`/boards/${board.id}`}>{board.name}</Link>
+            </li>
+          ))}
+        </ol>
+      </nav>
+
+      {board.columns.length ? (
+        <ol>
+          {board.columns.map((column) => (
+            <li key={column.id}>
+              <h2>
+                {column.name} ({column.tasks.length})
+              </h2>
+              {column.tasks.length ? (
+                <ol>
+                  {column.tasks.map((task) => {
+                    const totalSubtasks = task.subtasks.length
+                    const completedSubtasks = task.subtasks.filter(
+                      (subtask) => subtask.isComplete
+                    ).length
+
+                    return (
+                      <li key={task.id}>
+                        <h3>{task.title}</h3>
+                        {totalSubtasks ? (
+                          <p>
+                            {completedSubtasks} of {totalSubtasks} subtasks
+                          </p>
+                        ) : null}
+                      </li>
+                    )
+                  })}
+                </ol>
+              ) : null}
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <EmptyBoard />
+      )}
     </div>
   )
 }
 
-type ColumnProps = {
-  column: { id: string; name: string; tasks: { id: string }[] }
-  tasks: {
-    [taskId: string]: {
-      id: string
-      title: string
-      subtasks: { isComplete: boolean }[]
-    }
-  }
-}
-
-function Column({ column, tasks }: ColumnProps) {
-  const headingId = useId()
-
-  return (
-    <li aria-labelledby={headingId}>
-      <h2 id={headingId}>
-        {column.name} ({column.tasks.length})
-      </h2>
-      <ol aria-labelledby={headingId}>
-        {column.tasks.map(({ id: taskId }) => {
-          const task = tasks[taskId]
-
-          return <Task task={task} key={taskId} />
-        })}
-      </ol>
-    </li>
-  )
-}
-
-type TaskProps = {
-  task: {
-    id: string
-    title: string
-    subtasks: { isComplete: boolean }[]
-  }
-}
-function Task({ task }: TaskProps) {
-  const headingId = useId()
-  const totalSubTasks = task.subtasks.length
-  const completedSubTasks = task.subtasks.filter((s) => s.isComplete).length
-
-  return (
-    <li aria-labelledby={headingId}>
-      <h3 id={headingId}>
-        <Link to={`tasks/${task.id}`}>{task.title}</Link>
-      </h3>
-      {totalSubTasks > 0 && (
-        <p>
-          {completedSubTasks} of {totalSubTasks} subtasks
-        </p>
-      )}
-    </li>
-  )
+function EmptyBoard() {
+  return <p>This board is empty. Create a new column to get started.</p>
 }

@@ -1,47 +1,106 @@
 import { getNewSeedData } from '~/test/factories'
 import { test, expect } from '~/test/fixtures'
 
-test('show lists of tasks', async ({ seedData, page }) => {
-  const [board] = seedData.boards
+test.describe('item ordering', () => {
+  test.describe('list of boards', () => {
+    test.use({
+      seedData: getNewSeedData({
+        boards: [{ name: 'A' }, { name: 'B' }, { name: 'C' }],
+      }),
+    })
+    test('shows a navigation ordered list of boards', async ({
+      seedData,
+      page,
+    }) => {
+      const { boards } = seedData
+      const boardNames = boards.map(({ name }) => name)
+      const navigation = await page.getByRole('navigation')
 
-  await page.getByRole('link', { name: board.name }).click()
+      const links = await navigation.getByRole('link')
 
-  await expect(
-    page.getByRole('heading', { name: board.name, level: 1 })
-  ).toBeVisible()
+      await expect(links).toHaveCount(boards.length)
+      await expect(links).toHaveText(boardNames)
 
-  // Check that the columns are in the right order
-  const columnNames = board.columns.map(({ name }) => new RegExp(name, 'i'))
-  const listOfColumns = await page.getByRole('list', { name: board.name })
-  // Have to select the level two headings - if we selected the list items
-  // it would recurse into the tasks
-  await expect(listOfColumns.getByRole('heading', { level: 2 })).toHaveText(
-    columnNames
-  )
+      for (const boardName of boardNames) {
+        await navigation.getByRole('link', { name: boardName }).click()
+        await expect(
+          page.getByRole('heading', { name: boardName, level: 1 })
+        ).toBeVisible()
+      }
+    })
+  })
+  test.describe('list of columns', () => {
+    // We use empty columns here so we can select list items and not worry about getting the tasks
+    test.use({
+      seedData: getNewSeedData({
+        boards: [
+          {
+            columns: [
+              { name: 'Column A', tasks: [] },
+              { name: 'Column B', tasks: [] },
+              { name: 'Column C', tasks: [] },
+            ],
+          },
+        ],
+      }),
+    })
+    test('shows ordered list of columns', async ({ seedData, page }) => {
+      const [board] = seedData.boards
+      const columnNamesRegex = board.columns.map(
+        ({ name }) => new RegExp(name, 'i')
+      )
 
-  for (const column of board.columns) {
-    const columnList = await page.getByRole('list', { name: column.name })
+      await page.getByRole('link', { name: board.name }).click()
 
-    const taskTitles = column.tasks.map(({ title }) => new RegExp(title, 'i'))
+      // get the list that has a listitem with the first column name
+      // This should be the list of all the colums
+      const listOfColumns = await page
+        .getByRole('list')
+        .filter({ has: page.getByText(columnNamesRegex[0]) })
 
-    await expect(columnList.getByRole('listitem')).toHaveText(taskTitles)
-  }
-})
+      const columnListItems = await listOfColumns.getByRole('listitem')
 
-test.describe('empty board', () => {
-  test.use({ seedData: getNewSeedData({ boards: [{ columns: [] }] }) })
+      await expect(columnListItems).toHaveCount(columnNamesRegex.length)
+      await expect(columnListItems).toHaveText(columnNamesRegex)
+    })
+  })
+  test.describe('list of tasks', () => {
+    test.use({
+      seedData: getNewSeedData({
+        boards: [
+          {
+            columns: [
+              {
+                name: 'Column A',
+                tasks: [
+                  { title: 'Task A' },
+                  { title: 'Task B' },
+                  { title: 'Task C' },
+                ],
+              },
+            ],
+          },
+        ],
+      }),
+    })
+    test('shows ordered list of tasks', async ({ seedData, page }) => {
+      const [board] = seedData.boards
+      const [column] = board.columns
+      const taskTitlesRegex = column.tasks.map(
+        ({ title }) => new RegExp(title, 'i')
+      )
 
-  test('show empty board state', async ({ seedData, page }) => {
-    const [board] = seedData.boards
+      await page.getByRole('link', { name: board.name }).click()
+      const listOfColumns = await page
+        .getByRole('list')
+        .filter({ has: page.getByText(column.name) })
 
-    await page.getByRole('link', { name: board.name }).click()
+      const listOfTasks = listOfColumns.getByRole('list')
 
-    await expect(
-      page.getByRole('heading', { name: board.name, level: 1 })
-    ).toBeVisible()
+      const taskListItems = await listOfTasks.getByRole('listitem')
 
-    await expect(
-      page.getByText('This board is empty. Create a new column to get started.')
-    ).toBeVisible()
+      await expect(taskListItems).toHaveCount(taskTitlesRegex.length)
+      await expect(taskListItems).toHaveText(taskTitlesRegex)
+    })
   })
 })
