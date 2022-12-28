@@ -32,3 +32,9 @@ globalStyle('input, button, textarea, select', {
 globalStyle('p, h1, h2, h3, h4, h5, h6', {
   overflowWrap: 'break-word',
 })
+
+// Global Typography
+globalStyle('body', {
+  fontFamily: '"Plus Jakarta Sans", sans-serif',
+  fontWeight: 500,
+})
