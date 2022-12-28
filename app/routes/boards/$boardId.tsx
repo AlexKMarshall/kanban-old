@@ -52,10 +52,13 @@ export default function Board() {
   return (
     <div>
       <header>
-        <img
-          src="/assets/logo-light.svg"
-          alt="Kanban logo - 3 vertical purple lines"
-        />
+        <picture>
+          <source srcSet="/assets/logo-dark.svg" media="(min-width: 768px)" />
+          <img
+            src="/assets/logo-mobile.svg"
+            alt="Kanban logo - 3 vertical purple lines"
+          />
+        </picture>
         <h1>{board.name}</h1>
       </header>
       <nav>
