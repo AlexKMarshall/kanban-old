@@ -46,7 +46,9 @@ test.describe('item ordering', () => {
     })
     test('shows ordered list of columns', async ({ seedData, page }) => {
       const [board] = seedData.boards
-      const columnNames = board.columns.map(({ name }) => name)
+      const columnNamesRegex = board.columns.map(
+        ({ name }) => new RegExp(name, 'i')
+      )
 
       await page.getByRole('link', { name: board.name }).click()
 
@@ -54,12 +56,12 @@ test.describe('item ordering', () => {
       // This should be the list of all the colums
       const listOfColumns = await page
         .getByRole('list')
-        .filter({ has: page.getByText(columnNames[0]) })
+        .filter({ has: page.getByText(columnNamesRegex[0]) })
 
       const columnListItems = await listOfColumns.getByRole('listitem')
 
-      await expect(columnListItems).toHaveCount(columnNames.length)
-      await expect(columnListItems).toHaveText(columnNames)
+      await expect(columnListItems).toHaveCount(columnNamesRegex.length)
+      await expect(columnListItems).toHaveText(columnNamesRegex)
     })
   })
   test.describe('list of tasks', () => {

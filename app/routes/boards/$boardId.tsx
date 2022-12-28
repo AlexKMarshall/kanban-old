@@ -69,7 +69,9 @@ export default function Board() {
         <ol>
           {board.columns.map((column) => (
             <li key={column.id}>
-              <h2>{column.name}</h2>
+              <h2>
+                {column.name} ({column.tasks.length})
+              </h2>
               {column.tasks.length ? (
                 <ol>
                   {column.tasks.map((task) => {
