@@ -4,6 +4,9 @@ import { json } from '@remix-run/node'
 import { Link, useLoaderData } from '@remix-run/react'
 import { z } from 'zod'
 import { db } from '~/db.server'
+import { routeStyles } from '~/styles'
+
+const styles = routeStyles.$boardId
 
 const paramsSchema = z.object({
   boardId: z.string(),
@@ -51,7 +54,7 @@ export default function Board() {
 
   return (
     <div>
-      <header>
+      <header className={styles.header}>
         <picture>
           <source srcSet="/assets/logo-dark.svg" media="(min-width: 768px)" />
           <img
