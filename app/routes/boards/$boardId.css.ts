@@ -10,11 +10,16 @@ export const pageLayout = style({
 export const logo = style({
   marginBlock: 16,
   marginInlineStart: 16,
+  marginInlineEnd: 16,
   alignSelf: 'center',
   '@media': {
+    'screen and (min-width: 768px)': {
+      marginInlineStart: 24,
+      marginInlineEnd: 24,
+    },
     'screen and (min-width: 1024px)': {
       marginBlock: 24,
-      marginInlineStart: 24,
+      marginInlineEnd: 32,
     },
   },
 })
@@ -23,9 +28,14 @@ export const heading = style(
   {
     marginBlock: 16,
     alignSelf: 'center',
+    lineHeight: 1.25,
     '@media': {
+      'screen and (min-width: 768px)': {
+        marginInlineStart: 24,
+      },
       'screen and (min-width: 1024px)': {
         marginBlock: 24,
+        marginInlineEnd: 32,
       },
     },
   },
