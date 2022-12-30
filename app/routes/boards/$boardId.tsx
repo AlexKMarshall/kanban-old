@@ -4,7 +4,7 @@ import { json } from '@remix-run/node'
 import { Link, useLoaderData } from '@remix-run/react'
 import { z } from 'zod'
 import { db } from '~/db.server'
-import { routeStyles } from '~/styles'
+import { routeStyles, sprinkles } from '~/styles'
 
 const styles = routeStyles.$boardId
 
@@ -62,14 +62,27 @@ export default function Board() {
             alt="Kanban logo - 3 vertical purple lines"
           />
         </picture>
-        <h1>{board.name}</h1>
+        <h1
+          className={sprinkles({
+            fontSize: { mobile: 'l', tablet: 'xl', desktop: '2xl' },
+          })}
+        >
+          {board.name}
+        </h1>
       </header>
       <nav>
-        <h2>All boards ({boards.length})</h2>
+        <h2 className={sprinkles({ fontSize: 'xs' })}>
+          All boards ({boards.length})
+        </h2>
         <ol>
           {boards.map((board) => (
             <li key={board.id}>
-              <Link to={`/boards/${board.id}`}>{board.name}</Link>
+              <Link
+                to={`/boards/${board.id}`}
+                className={sprinkles({ fontSize: 'm' })}
+              >
+                {board.name}
+              </Link>
             </li>
           ))}
         </ol>
@@ -79,7 +92,7 @@ export default function Board() {
         <ol>
           {board.columns.map((column) => (
             <li key={column.id}>
-              <h2>
+              <h2 className={sprinkles({ fontSize: 'xs' })}>
                 {column.name} ({column.tasks.length})
               </h2>
               {column.tasks.length ? (
@@ -92,9 +105,11 @@ export default function Board() {
 
                     return (
                       <li key={task.id}>
-                        <h3>{task.title}</h3>
+                        <h3 className={sprinkles({ fontSize: 'm' })}>
+                          {task.title}
+                        </h3>
                         {totalSubtasks ? (
-                          <p>
+                          <p className={sprinkles({ fontSize: 'xs' })}>
                             {completedSubtasks} of {totalSubtasks} subtasks
                           </p>
                         ) : null}
@@ -114,5 +129,9 @@ export default function Board() {
 }
 
 function EmptyBoard() {
-  return <p>This board is empty. Create a new column to get started.</p>
+  return (
+    <p className={sprinkles({ fontSize: 'l' })}>
+      This board is empty. Create a new column to get started.
+    </p>
+  )
 }

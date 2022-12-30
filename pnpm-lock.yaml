@@ -15,6 +15,7 @@ specifiers:
   '@typescript-eslint/parser': ^5.47.0
   '@vanilla-extract/css': ^1.9.2
   '@vanilla-extract/esbuild-plugin': ^2.2.0
+  '@vanilla-extract/sprinkles': ^1.5.1
   esbuild: ^0.16.10
   esbuild-register: ^3.4.2
   eslint: ^8.30.0
@@ -37,6 +38,7 @@ dependencies:
   '@remix-run/react': 1.9.0_biqbaboplfbrettd7655fr4n2y
   '@remix-run/serve': 1.9.0_biqbaboplfbrettd7655fr4n2y
   '@vanilla-extract/css': 1.9.2
+  '@vanilla-extract/sprinkles': 1.5.1_@vanilla-extract+css@1.9.2
   isbot: 3.6.5
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
@@ -2558,6 +2560,14 @@ packages:
 
   /@vanilla-extract/private/1.0.3:
     resolution: {integrity: sha512-17kVyLq3ePTKOkveHxXuIJZtGYs+cSoev7BlP+Lf4916qfDhk/HBjvlYDe8egrea7LNPHKwSZJK/bzZC+Q6AwQ==}
+
+  /@vanilla-extract/sprinkles/1.5.1_@vanilla-extract+css@1.9.2:
+    resolution: {integrity: sha512-xPYpeEZEC1mhiPqWCBPGdIHkpFaaQIbaAfG9W2JyIW0byqTP7CoaxdYNMPjhZuoV5lkTI14SJg8Bt+fZqmV5yQ==}
+    peerDependencies:
+      '@vanilla-extract/css': ^1.0.0
+    dependencies:
+      '@vanilla-extract/css': 1.9.2
+    dev: false
 
   /@web3-storage/multipart-parser/1.0.0:
     resolution: {integrity: sha512-BEO6al7BYqcnfX15W2cnGR+Q566ACXAT9UQykORCWW80lmkpWsnEob6zJS1ZVBKsSJC8+7vJkHwlp+lXG1UCdw==}
