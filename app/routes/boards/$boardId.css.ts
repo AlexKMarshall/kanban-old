@@ -6,3 +6,13 @@ export const header = style({
   gap: 20,
   padding: 20,
 })
+
+export const main = style({
+  overflow: 'auto',
+})
+
+export const columnList = style({
+  display: 'grid',
+  gridAutoColumns: 280,
+  gridAutoFlow: 'column',
+})

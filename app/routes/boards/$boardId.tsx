@@ -96,59 +96,60 @@ export default function Board() {
         </ol>
       </nav>
 
-      {board.columns.length ? (
-        <ol>
-          {board.columns.map((column) => (
-            <li key={column.id}>
-              <h2
-                className={sprinkles({
-                  fontSize: 'xs',
-                  fontWeight: 'bold',
-                  letterSpacing: 'wide',
-                  textTransform: 'uppercase',
-                })}
-              >
-                {column.name} ({column.tasks.length})
-              </h2>
-              {column.tasks.length ? (
-                <ol>
-                  {column.tasks.map((task) => {
-                    const totalSubtasks = task.subtasks.length
-                    const completedSubtasks = task.subtasks.filter(
-                      (subtask) => subtask.isComplete
-                    ).length
-
-                    return (
-                      <li key={task.id}>
-                        <h3
-                          className={sprinkles({
-                            fontSize: 'm',
-                            fontWeight: 'bold',
-                          })}
-                        >
-                          {task.title}
-                        </h3>
-                        {totalSubtasks ? (
-                          <p
+      <main className={styles.main}>
+        {board.columns.length ? (
+          <ol className={styles.columnList}>
+            {board.columns.map((column) => (
+              <li key={column.id}>
+                <h2
+                  className={sprinkles({
+                    fontSize: 'xs',
+                    fontWeight: 'bold',
+                    letterSpacing: 'wide',
+                    textTransform: 'uppercase',
+                  })}
+                >
+                  {column.name} ({column.tasks.length})
+                </h2>
+                {column.tasks.length ? (
+                  <ol>
+                    {column.tasks.map((task) => {
+                      const totalSubtasks = task.subtasks.length
+                      const completedSubtasks = task.subtasks.filter(
+                        (subtask) => subtask.isComplete
+                      ).length
+                      return (
+                        <li key={task.id}>
+                          <h3
                             className={sprinkles({
-                              fontSize: 'xs',
+                              fontSize: 'm',
                               fontWeight: 'bold',
                             })}
                           >
-                            {completedSubtasks} of {totalSubtasks} subtasks
-                          </p>
-                        ) : null}
-                      </li>
-                    )
-                  })}
-                </ol>
-              ) : null}
-            </li>
-          ))}
-        </ol>
-      ) : (
-        <EmptyBoard />
-      )}
+                            {task.title}
+                          </h3>
+                          {totalSubtasks ? (
+                            <p
+                              className={sprinkles({
+                                fontSize: 'xs',
+                                fontWeight: 'bold',
+                              })}
+                            >
+                              {completedSubtasks} of {totalSubtasks} subtasks
+                            </p>
+                          ) : null}
+                        </li>
+                      )
+                    })}
+                  </ol>
+                ) : null}
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <EmptyBoard />
+        )}
+      </main>
     </div>
   )
 }
