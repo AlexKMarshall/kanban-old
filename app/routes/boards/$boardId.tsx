@@ -72,7 +72,14 @@ export default function Board() {
         </h1>
       </header>
       <nav>
-        <h2 className={sprinkles({ fontSize: 'xs', fontWeight: 'bold' })}>
+        <h2
+          className={sprinkles({
+            fontSize: 'xs',
+            fontWeight: 'bold',
+            letterSpacing: 'wide',
+            textTransform: 'uppercase',
+          })}
+        >
           All boards ({boards.length})
         </h2>
         <ol>
@@ -93,7 +100,14 @@ export default function Board() {
         <ol>
           {board.columns.map((column) => (
             <li key={column.id}>
-              <h2 className={sprinkles({ fontSize: 'xs', fontWeight: 'bold' })}>
+              <h2
+                className={sprinkles({
+                  fontSize: 'xs',
+                  fontWeight: 'bold',
+                  letterSpacing: 'wide',
+                  textTransform: 'uppercase',
+                })}
+              >
                 {column.name} ({column.tasks.length})
               </h2>
               {column.tasks.length ? (

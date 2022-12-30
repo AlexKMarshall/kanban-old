@@ -20,6 +20,10 @@ const responsiveProperties = defineProperties({
       medium: 500,
       bold: 700,
     },
+    letterSpacing: {
+      wide: '0.2em',
+    },
+    textTransform: ['uppercase'],
   },
 })
 
