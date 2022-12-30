@@ -16,6 +16,10 @@ const responsiveProperties = defineProperties({
       xl: `${20 / 16}rem`,
       '2xl': `${24 / 16}rem`,
     },
+    fontWeight: {
+      medium: 500,
+      bold: 700,
+    },
   },
 })
 

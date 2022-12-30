@@ -65,13 +65,14 @@ export default function Board() {
         <h1
           className={sprinkles({
             fontSize: { mobile: 'l', tablet: 'xl', desktop: '2xl' },
+            fontWeight: 'bold',
           })}
         >
           {board.name}
         </h1>
       </header>
       <nav>
-        <h2 className={sprinkles({ fontSize: 'xs' })}>
+        <h2 className={sprinkles({ fontSize: 'xs', fontWeight: 'bold' })}>
           All boards ({boards.length})
         </h2>
         <ol>
@@ -79,7 +80,7 @@ export default function Board() {
             <li key={board.id}>
               <Link
                 to={`/boards/${board.id}`}
-                className={sprinkles({ fontSize: 'm' })}
+                className={sprinkles({ fontSize: 'm', fontWeight: 'bold' })}
               >
                 {board.name}
               </Link>
@@ -92,7 +93,7 @@ export default function Board() {
         <ol>
           {board.columns.map((column) => (
             <li key={column.id}>
-              <h2 className={sprinkles({ fontSize: 'xs' })}>
+              <h2 className={sprinkles({ fontSize: 'xs', fontWeight: 'bold' })}>
                 {column.name} ({column.tasks.length})
               </h2>
               {column.tasks.length ? (
@@ -105,11 +106,21 @@ export default function Board() {
 
                     return (
                       <li key={task.id}>
-                        <h3 className={sprinkles({ fontSize: 'm' })}>
+                        <h3
+                          className={sprinkles({
+                            fontSize: 'm',
+                            fontWeight: 'bold',
+                          })}
+                        >
                           {task.title}
                         </h3>
                         {totalSubtasks ? (
-                          <p className={sprinkles({ fontSize: 'xs' })}>
+                          <p
+                            className={sprinkles({
+                              fontSize: 'xs',
+                              fontWeight: 'bold',
+                            })}
+                          >
                             {completedSubtasks} of {totalSubtasks} subtasks
                           </p>
                         ) : null}
@@ -130,7 +141,7 @@ export default function Board() {
 
 function EmptyBoard() {
   return (
-    <p className={sprinkles({ fontSize: 'l' })}>
+    <p className={sprinkles({ fontSize: 'l', fontWeight: 'bold' })}>
       This board is empty. Create a new column to get started.
     </p>
   )
