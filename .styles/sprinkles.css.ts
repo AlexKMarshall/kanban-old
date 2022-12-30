@@ -24,6 +24,7 @@ const responsiveProperties = defineProperties({
       wide: '0.2em',
     },
     textTransform: ['uppercase'],
+    display: ['none', 'block'],
   },
 })
 

@@ -53,25 +53,20 @@ export default function Board() {
   const { board, boards } = useLoaderData<typeof loader>()
 
   return (
-    <div>
+    <div className={styles.pageLayout}>
       <header className={styles.header}>
-        <picture>
+        <picture className={styles.logo}>
           <source srcSet="/assets/logo-dark.svg" media="(min-width: 768px)" />
           <img
             src="/assets/logo-mobile.svg"
             alt="Kanban logo - 3 vertical purple lines"
           />
         </picture>
-        <h1
-          className={sprinkles({
-            fontSize: { mobile: 'l', tablet: 'xl', desktop: '2xl' },
-            fontWeight: 'bold',
-          })}
-        >
-          {board.name}
-        </h1>
+        <h1 className={styles.heading}>{board.name}</h1>
       </header>
-      <nav>
+      <nav
+        className={sprinkles({ display: { mobile: 'none', tablet: 'block' } })}
+      >
         <h2
           className={sprinkles({
             fontSize: 'xs',
