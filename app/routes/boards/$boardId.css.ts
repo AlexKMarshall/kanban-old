@@ -54,4 +54,5 @@ export const columnList = style({
   display: 'grid',
   gridAutoColumns: 280,
   gridAutoFlow: 'column',
+  gap: 24,
 })
