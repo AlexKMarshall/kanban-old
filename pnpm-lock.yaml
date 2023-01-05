@@ -3,7 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@faker-js/faker': ^7.6.0
   '@playwright/test': ^1.29.1
-  '@prisma/client': 4.8.0
+  '@prisma/client': 4.8.1
   '@remix-run/dev': ^1.9.0
   '@remix-run/eslint-config': ^1.9.0
   '@remix-run/node': ^1.9.0
@@ -32,7 +32,7 @@ specifiers:
   zod: ^3.20.2
 
 dependencies:
-  '@prisma/client': 4.8.0_prisma@4.8.0
+  '@prisma/client': 4.8.1_prisma@4.8.0
   '@remix-run/node': 1.9.0_biqbaboplfbrettd7655fr4n2y
   '@remix-run/react': 1.9.0_biqbaboplfbrettd7655fr4n2y
   '@remix-run/serve': 1.9.0_biqbaboplfbrettd7655fr4n2y
@@ -1972,8 +1972,8 @@ packages:
       playwright-core: 1.29.1
     dev: true
 
-  /@prisma/client/4.8.0_prisma@4.8.0:
-    resolution: {integrity: sha512-Y1riB0p2W52kh3zgssP/YAhln3RjBFcJy3uwEiyjmU+TQYh6QTZDRFBo3JtBWuq2FyMOl1Rye8jxzUP+n0l5Cg==}
+  /@prisma/client/4.8.1_prisma@4.8.0:
+    resolution: {integrity: sha512-d4xhZhETmeXK/yZ7K0KcVOzEfI5YKGGEr4F5SBV04/MU4ncN/HcE28sy3e4Yt8UFW0ZuImKFQJE+9rWt9WbGSQ==}
     engines: {node: '>=14.17'}
     requiresBuild: true
     peerDependencies:
