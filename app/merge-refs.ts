@@ -1,6 +1,6 @@
 import type { MutableRefObject, LegacyRef, RefCallback } from 'react'
 
-export function mergeRefs<T = any>(
+export function mergeRefs<T = unknown>(
   refs: Array<MutableRefObject<T> | LegacyRef<T>>
 ): RefCallback<T> {
   return (value) => {

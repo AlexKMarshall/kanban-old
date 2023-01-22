@@ -1,3 +1,4 @@
+import type { Subtask, Task } from '@prisma/client'
 import type { LoaderArgs } from '@remix-run/node'
 import { Response } from '@remix-run/node'
 import { json } from '@remix-run/node'
@@ -107,32 +108,15 @@ export default function Board() {
                   {column.name} ({column.tasks.length})
                 </h2>
                 {column.tasks.length ? (
-                  <ol>
+                  <ol className={styles.taskList}>
                     {column.tasks.map((task) => {
-                      const totalSubtasks = task.subtasks.length
-                      const completedSubtasks = task.subtasks.filter(
-                        (subtask) => subtask.isComplete
-                      ).length
                       return (
                         <li key={task.id}>
-                          <h3
-                            className={sprinkles({
-                              fontSize: 'm',
-                              fontWeight: 'bold',
-                            })}
-                          >
-                            {task.title}
-                          </h3>
-                          {totalSubtasks ? (
-                            <p
-                              className={sprinkles({
-                                fontSize: 'xs',
-                                fontWeight: 'bold',
-                              })}
-                            >
-                              {completedSubtasks} of {totalSubtasks} subtasks
-                            </p>
-                          ) : null}
+                          <TaskCard
+                            id={task.id}
+                            title={task.title}
+                            subtasks={task.subtasks}
+                          />
                         </li>
                       )
                     })}
@@ -154,5 +138,37 @@ function EmptyBoard() {
     <p className={sprinkles({ fontSize: 'l', fontWeight: 'bold' })}>
       This board is empty. Create a new column to get started.
     </p>
+  )
+}
+
+type TaskCardProps = Pick<Task, 'id' | 'title'> & {
+  subtasks: Pick<Subtask, 'isComplete'>[]
+}
+function TaskCard({ id, title, subtasks }: TaskCardProps) {
+  const totalSubtasks = subtasks.length
+  const completedSubtasks = subtasks.filter(
+    (subtask) => subtask.isComplete
+  ).length
+  return (
+    <div className={styles.taskCard}>
+      <h3
+        className={sprinkles({
+          fontSize: 'm',
+          fontWeight: 'bold',
+        })}
+      >
+        {title}
+      </h3>
+      {totalSubtasks ? (
+        <p
+          className={sprinkles({
+            fontSize: 'xs',
+            fontWeight: 'bold',
+          })}
+        >
+          {completedSubtasks} of {totalSubtasks} subtasks
+        </p>
+      ) : null}
+    </div>
   )
 }

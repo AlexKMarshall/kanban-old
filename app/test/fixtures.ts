@@ -20,6 +20,7 @@ type WorkerFixtures = {
 
 const test = base.extend<TestFixtures, WorkerFixtures>({
   database: [
+    // eslint-disable-next-line no-empty-pattern
     async ({}, use) => {
       const database = await prepareDatabase()
       await use(database)
@@ -41,6 +42,7 @@ const test = base.extend<TestFixtures, WorkerFixtures>({
     },
     { scope: 'worker', auto: true },
   ],
+  // eslint-disable-next-line no-empty-pattern
   seedData: async ({}, use) => {
     await use(getNewSeedData(seedData))
   },
