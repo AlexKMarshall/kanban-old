@@ -21,6 +21,16 @@ export const links: LinksFunction = () => [
     rel: 'stylesheet',
     href: vanillaExtractStyles,
   },
+  { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+  {
+    rel: 'preconnect',
+    href: 'https://fonts.gstatic.com',
+    crossOrigin: 'anonymous',
+  },
+  {
+    rel: 'stylesheet',
+    href: 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700&display=swap',
+  },
 ]
 
 export default function App() {

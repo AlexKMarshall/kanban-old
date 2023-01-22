@@ -1,9 +1,13 @@
+import type { Subtask, Task } from '@prisma/client'
 import type { LoaderArgs } from '@remix-run/node'
 import { Response } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Link, useLoaderData } from '@remix-run/react'
 import { z } from 'zod'
 import { db } from '~/db.server'
+import { routeStyles, sprinkles } from '~/styles'
+
+const styles = routeStyles.$boardId
 
 const paramsSchema = z.object({
   boardId: z.string(),
@@ -50,59 +54,121 @@ export default function Board() {
   const { board, boards } = useLoaderData<typeof loader>()
 
   return (
-    <div>
-      <header>
-        <h1>{board.name}</h1>
+    <div className={styles.pageLayout}>
+      <header className={styles.header}>
+        <picture className={styles.logo}>
+          <source srcSet="/assets/logo-dark.svg" media="(min-width: 768px)" />
+          <img
+            src="/assets/logo-mobile.svg"
+            alt="Kanban logo - 3 vertical purple lines"
+          />
+        </picture>
+        <h1 className={styles.heading}>{board.name}</h1>
       </header>
-      <nav>
-        <h2>All boards ({boards.length})</h2>
+      <nav
+        className={sprinkles({ display: { mobile: 'none', tablet: 'block' } })}
+      >
+        <h2
+          className={sprinkles({
+            fontSize: 'xs',
+            fontWeight: 'bold',
+            letterSpacing: 'wide',
+            textTransform: 'uppercase',
+          })}
+        >
+          All boards ({boards.length})
+        </h2>
         <ol>
           {boards.map((board) => (
             <li key={board.id}>
-              <Link to={`/boards/${board.id}`}>{board.name}</Link>
+              <Link
+                to={`/boards/${board.id}`}
+                className={sprinkles({ fontSize: 'm', fontWeight: 'bold' })}
+              >
+                {board.name}
+              </Link>
             </li>
           ))}
         </ol>
       </nav>
 
-      {board.columns.length ? (
-        <ol>
-          {board.columns.map((column) => (
-            <li key={column.id}>
-              <h2>
-                {column.name} ({column.tasks.length})
-              </h2>
-              {column.tasks.length ? (
-                <ol>
-                  {column.tasks.map((task) => {
-                    const totalSubtasks = task.subtasks.length
-                    const completedSubtasks = task.subtasks.filter(
-                      (subtask) => subtask.isComplete
-                    ).length
-
-                    return (
-                      <li key={task.id}>
-                        <h3>{task.title}</h3>
-                        {totalSubtasks ? (
-                          <p>
-                            {completedSubtasks} of {totalSubtasks} subtasks
-                          </p>
-                        ) : null}
-                      </li>
-                    )
+      <main className={styles.main}>
+        {board.columns.length ? (
+          <ol className={styles.columnList}>
+            {board.columns.map((column) => (
+              <li key={column.id}>
+                <h2
+                  className={sprinkles({
+                    fontSize: 'xs',
+                    fontWeight: 'bold',
+                    letterSpacing: 'wide',
+                    textTransform: 'uppercase',
                   })}
-                </ol>
-              ) : null}
-            </li>
-          ))}
-        </ol>
-      ) : (
-        <EmptyBoard />
-      )}
+                >
+                  {column.name} ({column.tasks.length})
+                </h2>
+                {column.tasks.length ? (
+                  <ol className={styles.taskList}>
+                    {column.tasks.map((task) => {
+                      return (
+                        <li key={task.id}>
+                          <TaskCard
+                            id={task.id}
+                            title={task.title}
+                            subtasks={task.subtasks}
+                          />
+                        </li>
+                      )
+                    })}
+                  </ol>
+                ) : null}
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <EmptyBoard />
+        )}
+      </main>
     </div>
   )
 }
 
 function EmptyBoard() {
-  return <p>This board is empty. Create a new column to get started.</p>
+  return (
+    <p className={sprinkles({ fontSize: 'l', fontWeight: 'bold' })}>
+      This board is empty. Create a new column to get started.
+    </p>
+  )
+}
+
+type TaskCardProps = Pick<Task, 'id' | 'title'> & {
+  subtasks: Pick<Subtask, 'isComplete'>[]
+}
+function TaskCard({ id, title, subtasks }: TaskCardProps) {
+  const totalSubtasks = subtasks.length
+  const completedSubtasks = subtasks.filter(
+    (subtask) => subtask.isComplete
+  ).length
+  return (
+    <div className={styles.taskCard}>
+      <h3
+        className={sprinkles({
+          fontSize: 'm',
+          fontWeight: 'bold',
+        })}
+      >
+        {title}
+      </h3>
+      {totalSubtasks ? (
+        <p
+          className={sprinkles({
+            fontSize: 'xs',
+            fontWeight: 'bold',
+          })}
+        >
+          {completedSubtasks} of {totalSubtasks} subtasks
+        </p>
+      ) : null}
+    </div>
+  )
 }

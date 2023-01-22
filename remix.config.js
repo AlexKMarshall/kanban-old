@@ -6,6 +6,7 @@ module.exports = {
     '**/*.test.ts',
     '**/*.spec.tsx',
     '**/*.spec.ts',
+    '**/*.css.ts',
   ],
   // appDirectory: "app",
   // assetsBuildDirectory: "public/build",
