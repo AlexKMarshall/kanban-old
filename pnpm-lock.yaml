@@ -2,8 +2,8 @@ lockfileVersion: '6.0'
 
 dependencies:
   '@prisma/client':
-    specifier: 4.14.0
-    version: 4.14.0(prisma@4.8.0)
+    specifier: 4.14.1
+    version: 4.14.1(prisma@4.8.0)
   '@remix-run/node':
     specifier: ^1.9.0
     version: 1.9.0(react-dom@18.2.0)(react@18.2.0)
@@ -1999,8 +1999,8 @@ packages:
       playwright-core: 1.29.1
     dev: true
 
-  /@prisma/client@4.14.0(prisma@4.8.0):
-    resolution: {integrity: sha512-MK/XaA2sFdfaOa7I9MjNKz6dxeIEdeZlnpNRoF2w3JuRLlFJLkpp6cD3yaqw2nUUhbrn3Iqe3ZpVV+VuGGil7Q==}
+  /@prisma/client@4.14.1(prisma@4.8.0):
+    resolution: {integrity: sha512-TZIswkeX1ccsHG/eN2kICzg/csXll0osK3EHu1QKd8VJ3XLcXozbNELKkCNfsCUvKJAwPdDtFCzF+O+raIVldw==}
     engines: {node: '>=14.17'}
     requiresBuild: true
     peerDependencies:
